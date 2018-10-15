@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<body>
+    <p>This is menu page</p>
+    <div>
+        <a href="/accounts/logout/"><b>LOGOUT</b></a>
+    </div>
+    <div>
+        <a href="/dashboard"><b>Dashboard</b></a>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    <b>Dish Name</b>
+                </td>
+                <td>
+                    <b>Price</b>
+                </td>
+            </tr>
+            <form>
+                {% for name,price,value in data %}
+                <tr>
+                    <td>
+                        <input class="checkbox" type="checkbox" value={{value}}></input>
+                    </td>
+                    <td>
+                        {{name}}
+                    </td>
+                    <td>
+                        {{price}} Rs
+                    </td>
+                </tr>
+            {% endfor %}
+            </form>
+        </table>
+        <button id = "btn">Order Food</button>
+    </div>
+</body>
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    document.getElementById ("btn").addEventListener ("click", myFunction, false);
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    function myFunction(){
+        var chk = document.getElementsByClassName('checkbox');
+        var values = [];
+
+        for (i=0;i<chk.length;i++){
+            if(chk[i].checked== true){
+                values.push(chk[i].value)
+            };
+        };
+
+            if(values.length==0){
+            alert("Please select an item.");
+            }
+            else{
+            $.ajax({
+            type:'POST',
+            url:'/restraunts/orders/',
+            dataType: 'json',
+            contentType: 'json',
+            data:{csrfmiddlewaretoken: '{{ csrf_token }}',
+                  dishes:JSON.stringify(chk)}
+        });
+        window.location.href = "/dashboard"
+        };
+    }
+</script>

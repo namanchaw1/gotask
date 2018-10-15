@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <h2>Hi {{username}},</h2>
+    <div>
+        <a href="/accounts/logout/">LOGOUT</a>
+    </div>
+    <p>Below are your current orders</p>
+    <table>
+        <tr>
+            <td>
+                <b>Order ID</b>
+            </td>
+            <td>
+                <b>Time Remaining</b>
+            </td>
+        </tr>
+        {% for order, time, status in data %}
+        <tr>
+            <td>
+                {{order.order_id}}
+            </td>
+            <td>
+                {{time}}
+            </td>
+            <td>
+                {{status}}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <a href="/restraunts">Make Another Order</a>
+    </div>
+</body>
+</html>

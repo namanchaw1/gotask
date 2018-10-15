@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This is homepage</title>
+</head>
+<body>
+<div>
+    <b>Hi {{username}}</b>,
+</div>
+<div>
+    <a href="/accounts/logout/">LOGOUT</a>
+</div>
+<div>
+    <a href="/dashboard"><b>Dashboard</b></a>
+</div>
+<p>
+    Please select from below Restraunts
+</p>
+<table>
+    <tr>
+        <td>
+            <b>Restraunts</b>
+        </td>
+        <td>
+            <b>Place</b>
+        </td>
+    </tr>
+    {% for restraunts,place,id in data %}
+    <tr>
+        <td>
+            <a href="/restraunts/{{id}}">{{restraunts}}</a>
+        </td>
+        <td>
+            {{place}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
